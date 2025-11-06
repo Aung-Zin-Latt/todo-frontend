@@ -7,9 +7,20 @@
       <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">My Todo List</h1>
 
       <!-- Add Task Form -->
-      <form @submit.prevent="addNewTask" class="flex items-center gap-2 mb-4">
-        <BaseInput v-model="newTask" type="text" placeholder="Enter a new task..." requried />
-        <BaseButton>Add Task</BaseButton>
+      <form @submit.prevent="addNewTask" class="flex items-start gap-2 mb-4 flex-nowrap">
+        <!-- Input wrapper -->
+        <div class="flex-1 min-w-0">
+          <BaseInput
+            v-model="newTask"
+            type="text"
+            placeholder="Enter a new task..."
+            :error="!newTask && showError ? 'Please enter a task.' : ''"
+            class="w-full"
+          />
+        </div>
+
+        <!-- Button stays aligned -->
+        <BaseButton class="whitespace-nowrap mt-[2px]">Add Task</BaseButton>
       </form>
 
       <!-- Task List -->
@@ -88,11 +99,23 @@ import BaseButton from '@/components/common/BaseButton.vue'
 const newTask = ref('')
 const store = useTaskStore()
 
+const showError = ref(false)
+
 async function addNewTask() {
-  if (!newTask.value.trim()) return
+  if (!newTask.value.trim()) {
+    showError.value = true
+    return
+  }
+  showError.value = false
   await store.addTask(newTask.value)
   newTask.value = ''
 }
+
+// async function addNewTask() {
+//   if (!newTask.value.trim()) return
+//   await store.addTask(newTask.value)
+//   newTask.value = ''
+// }
 
 onMounted(() => store.fetchTasks())
 </script>
