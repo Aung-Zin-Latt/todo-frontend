@@ -50,7 +50,7 @@
               >
                 ✅
               </button>
-              <span v-else class="text-gray-400 text-sm italic">✔ Done</span>
+              <span v-else class="text-gray-400 text-sm italic">Done</span>
             </div>
           </div>
         </transition-group>
@@ -110,12 +110,6 @@ async function addNewTask() {
   await store.addTask(newTask.value)
   newTask.value = ''
 }
-
-// async function addNewTask() {
-//   if (!newTask.value.trim()) return
-//   await store.addTask(newTask.value)
-//   newTask.value = ''
-// }
 
 onMounted(() => store.fetchTasks())
 </script>

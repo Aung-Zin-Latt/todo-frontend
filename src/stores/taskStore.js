@@ -28,12 +28,32 @@ export const useTaskStore = defineStore('taskStore', {
 
     // Add task (fake, just push to local state)
     async addTask(title) {
-      const newTask = {
-        _id: Date.now(), // temporary unique ID
-        title,
-        completed: false,
+      try {
+        const res = await fetch('https://dummyjson.com/todos/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            todo: title,
+            completed: false,
+            userId: 5, // just a dummy userId
+          }),
+        })
+        const data = await res.json()
+        // Add the new task to local state
+        this.tasks.unshift({
+          _id: data.id,
+          title: data.todo,
+          completed: data.completed,
+        })
+      } catch (error) {
+        console.error('Error adding task:', error)
+        // Fallback: add locally if API fails
+        this.tasks.unshift({
+          _id: Date.now(),
+          title,
+          completed: false,
+        })
       }
-      this.tasks.unshift(newTask)
     },
 
     // Mark completed (fake, just update local state)
