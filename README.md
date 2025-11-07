@@ -1,6 +1,18 @@
 # todo-frontend-app
 
-This template should help get you started developing with Vue 3 in Vite.
+This project is a modern Todo Frontend Application built with **Vue 3** and **Vite**, featuring state management, reusable components, API integration, and a clean responsive UI.
+
+## Features Implemented
+
+- **Pinia** for global state management
+- **Vue Router** for seamless page navigation
+- **Reusable Custom Components** such as BaseInput and BaseButton for consistent design and functionality
+- **Axios** for API communication with backend services
+- **Frontend Validation** to prevent empty or invalid task submissions
+- **TailwindCSS** for responsive, modern, and utility-first styling
+- **Smooth Transitions** and animations for better user experience
+- **Component-based Architecture** for scalability and clean code organization
+- **Vite** as the fast development and build tool
 
 ## Recommended IDE Setup
 
@@ -9,7 +21,7 @@ This template should help get you started developing with Vue 3 in Vite.
 ## Recommended Browser Setup
 
 - Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
+  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
   - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
 - Firefox:
   - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)

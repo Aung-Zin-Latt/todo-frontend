@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import api from '@/api/axios'
 
 export const useTaskStore = defineStore('taskStore', {
   state: () => ({
@@ -7,16 +8,15 @@ export const useTaskStore = defineStore('taskStore', {
   }),
 
   actions: {
-    // Fetch tasks from dummy JSON API
+    // Fetch all tasks from backend
     async fetchTasks() {
       this.loading = true
       try {
-        const res = await fetch('https://dummyjson.com/todos')
-        const data = await res.json()
-        // dummyjson returns { todos: [...] }
-        this.tasks = data.todos.map((todo) => ({
-          _id: todo.id, // match your frontend id field
-          title: todo.todo, // match your frontend title field
+        const res = await api.get('/todos')
+        // assuming backend returns an array of todos
+        this.tasks = res.data.data.map((todo) => ({
+          _id: todo._id,
+          title: todo.title,
           completed: todo.completed,
         }))
       } catch (error) {
@@ -26,40 +26,38 @@ export const useTaskStore = defineStore('taskStore', {
       }
     },
 
-    // Add task (fake, just push to local state)
+    // Add a new task via POST request
     async addTask(title) {
       try {
-        const res = await fetch('https://dummyjson.com/todos/add', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            todo: title,
-            completed: false,
-            userId: 5, // just a dummy userId
-          }),
-        })
-        const data = await res.json()
-        // Add the new task to local state
+        const res = await api.post('/todos', { title })
+        const newTask = res.data.data
+
         this.tasks.unshift({
-          _id: data.id,
-          title: data.todo,
-          completed: data.completed,
+          _id: newTask._id,
+          title: newTask.title,
+          completed: newTask.completed,
         })
       } catch (error) {
         console.error('Error adding task:', error)
-        // Fallback: add locally if API fails
-        this.tasks.unshift({
-          _id: Date.now(),
-          title,
-          completed: false,
-        })
       }
     },
 
-    // Mark completed (fake, just update local state)
+    // Mark task as completed (PUT request)
     async markCompleted(id) {
-      const index = this.tasks.findIndex((t) => t._id === id)
-      if (index !== -1) this.tasks[index].completed = true
+      try {
+        const res = await api.put(`/todos/${id}`)
+        const updated = res.data.data || res.data
+
+        // update local state
+        const index = this.tasks.findIndex((t) => t._id === id)
+        if (index !== -1)
+          this.tasks[index] = {
+            ...this.tasks[index],
+            completed: updated.completed,
+          }
+      } catch (error) {
+        console.error('Error marking completed:', error)
+      }
     },
   },
 })
